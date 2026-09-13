@@ -1,4 +1,4 @@
-name: Pipeline CI
+name: Pipeline CI-CD
 
 on:
   push:
@@ -7,16 +7,28 @@ on:
     branches: [ principal, main ]
 
 jobs:
-  build:
+  continuous-integration:
+    name: Build & Test (CI)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Configurar Python
+      - name: Configurar Ambiente Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Teste de Integracao
+      - name: Executar Testes Automatizados
         run: |
-          python -c "print('Pipeline CI/CD executado com sucesso!')"
+          python -c "print('CI: Testes de codigo executados com sucesso!')"
+
+  continuous-deployment:
+    name: Deploy Application (CD)
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Simular Deploy em Producao
+        run: |
+          echo "CD: Aplicacao implantada com sucesso no ambiente de producao!"
